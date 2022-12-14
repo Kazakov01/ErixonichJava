@@ -4,8 +4,8 @@ import java.util.Date;
 
 public class Main {
     public static void main(String[] args) {
-        MyClass.bar();
-        System.out.println("Hello");
+//        MyClass.bar();
+        System.out.println(divide(4,0));
     }
 
     /**
@@ -22,5 +22,16 @@ public class Main {
 
         Date date = new Date();
 
+    }
+
+    public static int divide(int a, int b)  {
+        try {
+            return a/b;
+        }
+        catch (ArithmeticException e){
+//            throw new MyException("division error occurred");
+//            throw new MyException(e);
+            throw new RuntimeException("division error occurred", e);
+        }
     }
 }
