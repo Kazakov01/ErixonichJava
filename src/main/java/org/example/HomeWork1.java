@@ -14,22 +14,21 @@ public class HomeWork1 {
         return ThreadLocalRandom.current().nextInt(1, 100);
     }
 
-    public static String compare(int rnd){
+    public static String compare(int rnd) {
         Scanner sc = new Scanner(System.in);
         int num = 0;
 
-        while (num != rnd) {
+        while (true) {
             num = sc.nextInt();
 
-            if (num > 101)
+            if (num > 101 || num < 1)
                 throw new RuntimeException("What an idiot");
-            if (num > rnd)
+            else if (num > rnd)
                 System.out.println("Your number is higher");
-            if (num < rnd)
+            else if (num < rnd)
                 System.out.println("Your number is less");
-            if (num == rnd)
+            else
                 return "THATS A MATCH!";
         }
-        return "";
     }
 }
