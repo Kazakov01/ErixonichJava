@@ -5,8 +5,8 @@ import java.util.Iterator;
 
 public class MyArrayList implements Iterable<Integer> {
 
-    int[] data = new int[1];
-    int size = 0;
+    private int[] data = new int[1];
+    private int size = 0;
 
     public void add(int x) {
        if (size == data.length) {
@@ -21,10 +21,46 @@ public class MyArrayList implements Iterable<Integer> {
     }
 
     public int get(int idx) {
-        if (size <= idx) {
+       checkIdx(idx);
+        return data[idx];
+    }
+
+    public void clear() {
+        int[] newData = new int[1];
+        size = 0;
+        data = newData;
+    }
+
+    public void remove(int idx) {
+        checkIdx(idx);
+        for (int i = idx; i < size - 1; i++) {
+            data[i] = data[i + 1];
+        }
+
+        size--;
+    }
+
+    public boolean isEmpty() {
+        return size == 0;
+    }
+
+    public void ensureCapacity(int capacity) {
+//        if (capacity <= data.length)
+//            return;
+
+        int[] newData = new int[capacity];
+
+        for (int i = 0 ; i < data.length; i++) {
+            newData[i] = data[i];
+        }
+
+        data = newData;
+    }
+
+    private void checkIdx(int idx) {
+        if (size <= idx && idx < 0) {
             throw new IndexOutOfBoundsException("Index " + idx + " Out of Bound of size " + size);
         }
-        return data[idx];
     }
 
     private void resize() {
