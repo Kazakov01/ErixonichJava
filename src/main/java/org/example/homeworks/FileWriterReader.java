@@ -1,12 +1,10 @@
-package org.example.io;
+package org.example.homeworks;
 
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Scanner;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
 
 public class FileWriterReader {
@@ -16,41 +14,34 @@ public class FileWriterReader {
         String filePath3 = "C:/JavaProjects/JavaEdu/src/main/resources/3file.txt";
         String filePathFinal = "C:/JavaProjects/JavaEdu/src/main/resources/result.txt";
 
-        File f1 = new File(filePath1);
-        File f2 = new File(filePath2);
-        File f3 = new File(filePath3);
-        File filefinal = new File(filePathFinal);
+        File file1 = new File(filePath1);
+        File file2 = new File(filePath2);
+        File file3 = new File(filePath3);
+        File fileFinal = new File(filePathFinal);
 
-        filefinal.delete();
+        List<String> words = new ArrayList<>();
 
-        Set<String> s1 = readFile(f1);
-        writeFile(filefinal, s1);
-
-        s1 = readFile(f2);
-        writeFile(filefinal, s1);
-
-        s1 = readFile(f3);
-        writeFile(filefinal, s1);
+        readFile(file1,words);
+        readFile(file2,words);
+        readFile(file3,words);
+        Collections.sort(words);
+        writeFile(fileFinal, words);
     }
 
-    private static Set<String> readFile(File file) throws IOException {
-        Set<String> s1 = new TreeSet<>();
-
+    private static void readFile(File file, List<String> words) throws IOException {
         try (FileReader fr = new FileReader(file); Scanner sc = new Scanner(fr);) {
             while (sc.hasNextLine()) {
-                s1.add(sc.nextLine());
+                words.add(sc.nextLine());
             }
         }
-        return s1;
     }
 
-    private static File writeFile(File file, Set<String> s1) throws IOException {
+    private static void writeFile(File file, List<String> words) throws IOException {
         try (FileWriter fw = new FileWriter(file, true)) {
-            for (String s : s1) {
+            for (String s : words) {
                 fw.write(s + "\n");
             }
         }
-        return file;
     }
 }
 
