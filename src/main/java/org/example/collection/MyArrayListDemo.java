@@ -1,6 +1,6 @@
 package org.example.collection;
 
-import java.util.ArrayList;
+import java.util.Iterator;
 
 public class MyArrayListDemo {
     public static void main(String[] args) {
@@ -8,10 +8,14 @@ public class MyArrayListDemo {
         mal.add(1);
         mal.add(2);
         mal.add(3);
-        mal.ensureCapacity(2);
-        System.out.println(mal.get(2));
+        mal.add(4);
 
-        new ArrayList<>();
-
+        for(int i : mal){
+            System.out.println(i);
+        }
+        for (Iterator<Integer> it = mal.iterator(); it.hasNext(); ){
+            int x  = it.next();
+            System.out.println(x);
+        }
     }
 }

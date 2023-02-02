@@ -45,8 +45,8 @@ public class MyArrayList implements Iterable<Integer> {
     }
 
     public void ensureCapacity(int capacity) {
-//        if (capacity <= data.length)
-//            return;
+        if (capacity <= data.length)
+            return;
 
         int[] newData = new int[capacity];
 
@@ -92,6 +92,26 @@ public class MyArrayList implements Iterable<Integer> {
 
     @Override
     public Iterator<Integer> iterator() {
-        return null;
+        return new Itr();
+    }
+
+    private class Itr implements Iterator<Integer>{
+
+        int idx;
+
+        @Override
+        public boolean hasNext() {
+            return idx < size;
+        }
+
+        @Override
+        public Integer next() {
+            return data[idx++];
+        }
+
+//        @Override
+//        public void remove() {
+//            Iterator.super.remove();
+//        }
     }
 }
