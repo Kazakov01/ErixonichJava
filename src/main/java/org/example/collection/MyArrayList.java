@@ -109,9 +109,9 @@ public class MyArrayList implements Iterable<Integer> {
             return data[idx++];
         }
 
-//        @Override
-//        public void remove() {
-//            Iterator.super.remove();
-//        }
+        @Override
+        public void remove() {
+            MyArrayList.this.remove(idx);
+        }
     }
 }
