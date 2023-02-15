@@ -15,7 +15,11 @@ public class MyLinkedListDemo {
         MyLinkedList mll = new MyLinkedList();
         mll.addLast("abc");
         mll.addLast("xyz");
+        mll.addFirst("SSS");
         mll.addLast("def");
+        mll.addFirst("AAA");
+        mll.addFirst("BBB");
+
 
         System.out.println(mll);
 

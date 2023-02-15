@@ -15,12 +15,22 @@ public class MyLinkedList {
             return;
         }
         tail.next = node;
-        tail= tail.next;
+        tail = tail.next;
     }
 
     // добавление в начале списка в качестве дз
     public void addFirst(String val) {
-       size++;
+
+        size++;
+        Node node = new Node(val);
+        if (head == null){
+            head = node;
+            tail = node;
+            return;
+        }
+        node.next = head;
+        head = node;
+
     }
 
     public int size() {
