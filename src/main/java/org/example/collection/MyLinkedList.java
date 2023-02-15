@@ -1,7 +1,9 @@
 package org.example.collection;
 
 
-public class MyLinkedList {
+import java.util.Iterator;
+
+public class MyLinkedList implements Iterable<String> {
     private Node head;
     private Node tail;
     private int size;
@@ -51,6 +53,11 @@ public class MyLinkedList {
         return sb.toString();
     }
 
+    @Override
+    public Iterator<String> iterator() {
+        return new Itr();
+    }
+
     private static class Node {
         Node next;
         String val;
@@ -59,4 +66,33 @@ public class MyLinkedList {
             this.val = val;
         }
     }
+
+    private class Itr implements Iterator<String> {
+
+        Node curr = head;
+        Node prev = null;
+
+        @Override
+        public boolean hasNext() {
+            return curr.next != null;
+        }
+
+        @Override
+        public String next() {
+            if (curr == null){
+                curr = head;
+            } else {
+                prev = curr;
+                curr = curr.next;
+            }
+            return curr.val;
+        }
+
+        @Override
+        public void remove() {
+            prev.next = curr.next;
+            curr = prev.next;
+        }
+    }
+    //обобщить линкд лист
 }

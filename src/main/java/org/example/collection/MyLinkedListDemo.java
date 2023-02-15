@@ -1,5 +1,7 @@
 package org.example.collection;
 
+import java.util.Iterator;
+
 public class MyLinkedListDemo {
     public static void main(String[] args) {
 //       abc qwe foo bar zxc
@@ -20,6 +22,13 @@ public class MyLinkedListDemo {
         mll.addFirst("AAA");
         mll.addFirst("BBB");
 
+
+        for(Iterator<String> it = mll.iterator(); it.hasNext();){
+            String s = it.next();
+            if (s.startsWith("a"))
+                it.remove();
+            System.out.println(s);
+        }
 
         System.out.println(mll);
 

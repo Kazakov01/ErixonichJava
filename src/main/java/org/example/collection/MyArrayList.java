@@ -2,13 +2,14 @@ package org.example.collection;
 
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.Objects;
 
-public class MyArrayList implements Iterable<Integer> {
+public class MyArrayList<T> implements Iterable<T> {
 
-    private int[] data = new int[1];
+    private Object[] data = new Object[1];
     private int size = 0;
 
-    public void add(int x) {
+    public void add(T x) {
        if (size == data.length) {
             resize();
         }
@@ -20,13 +21,13 @@ public class MyArrayList implements Iterable<Integer> {
         return size;
     }
 
-    public int get(int idx) {
+    public T get(int idx) {
        checkIdx(idx);
-        return data[idx];
+        return (T) data[idx];
     }
 
     public void clear() {
-        int[] newData = new int[1];
+        Object[] newData = new Object[1];
         size = 0;
         data = newData;
     }
@@ -48,7 +49,7 @@ public class MyArrayList implements Iterable<Integer> {
         if (capacity <= data.length)
             return;
 
-        int[] newData = new int[capacity];
+        Object[] newData = new Object[capacity];
 
         for (int i = 0 ; i < data.length; i++) {
             newData[i] = data[i];
@@ -64,7 +65,7 @@ public class MyArrayList implements Iterable<Integer> {
     }
 
     private void resize() {
-        int[] newData = new int[data.length*2];
+        Object[] newData = new Object[data.length*2];
 
         for (int i = 0 ; i < data.length; i++) {
             newData[i] = data[i];
@@ -91,11 +92,11 @@ public class MyArrayList implements Iterable<Integer> {
     }
 
     @Override
-    public Iterator<Integer> iterator() {
+    public Iterator<T> iterator() {
         return new Itr();
     }
 
-    private class Itr implements Iterator<Integer>{
+    private class Itr implements Iterator<T>{
 
         int idx;
 
@@ -105,8 +106,8 @@ public class MyArrayList implements Iterable<Integer> {
         }
 
         @Override
-        public Integer next() {
-            return data[idx++];
+        public T next() {
+            return (T)data[idx++];
         }
 
         @Override
