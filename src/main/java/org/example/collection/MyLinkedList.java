@@ -3,14 +3,14 @@ package org.example.collection;
 
 import java.util.Iterator;
 
-public class MyLinkedList implements Iterable<String> {
-    private Node head;
-    private Node tail;
+public class MyLinkedList<T> implements Iterable<T> {
+    private Node<T> head;
+    private Node<T> tail;
     private int size;
 
-    public void addLast(String val) {
+    public void addLast(T val) {
         size++;
-        Node node = new Node(val);
+        Node<T> node = new Node<T>(val);
         if (head == null){
             head = node;
             tail = node;
@@ -21,10 +21,10 @@ public class MyLinkedList implements Iterable<String> {
     }
 
     // добавление в начале списка в качестве дз
-    public void addFirst(String val) {
+    public void addFirst(T val) {
 
         size++;
-        Node node = new Node(val);
+        Node<T> node = new Node<T>(val);
         if (head == null){
             head = node;
             tail = node;
@@ -41,7 +41,7 @@ public class MyLinkedList implements Iterable<String> {
 
     @Override
     public String toString() {
-        Node cur = head;
+        Node<T> cur = head;
         StringBuilder sb = new StringBuilder();
 
         while (cur != null){
@@ -54,31 +54,31 @@ public class MyLinkedList implements Iterable<String> {
     }
 
     @Override
-    public Iterator<String> iterator() {
+    public Iterator<T> iterator() {
         return new Itr();
     }
 
-    private static class Node {
-        Node next;
-        String val;
+    private static class Node<T> {
+        Node<T> next;
+        T val;
 
-        public Node(String val) {
+        public Node(T val) {
             this.val = val;
         }
     }
 
-    private class Itr implements Iterator<String> {
+    private class Itr implements Iterator<T> {
 
-        Node curr = head;
-        Node prev = null;
+        Node<T> curr = null;
+        Node<T> prev = null;
 
         @Override
         public boolean hasNext() {
-            return curr.next != null;
+            return (curr == null && head != null) || (curr != null && curr.next != null);
         }
 
         @Override
-        public String next() {
+        public T next() {
             if (curr == null){
                 curr = head;
             } else {
