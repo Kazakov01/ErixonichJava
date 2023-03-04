@@ -2,10 +2,12 @@ package org.example.collection;
 
 public class MyHashMap<K, V> {
     private Node<K, V>[] nodeArr = new Node[10];
-    private double targetLoadFactor = 0.75;
+    private final double targetLoadFactor = 0.75;
     private int size = 0;
 
     public V put(K key, V val) {
+
+
         Node<K, V> existingNode = getNode(key);
         if (existingNode!= null) {
             V oldValue = existingNode.val;
@@ -86,13 +88,33 @@ public class MyHashMap<K, V> {
         return null;
     }
 
-    private void rehash() {
+    private void rehash1() {
 
-        double currLoadFactor = (double) size/nodeArr.length;;
+        double currLoadFactor = (double) size/nodeArr.length;
         if (currLoadFactor >= targetLoadFactor) {
-            Node<K, V>[] newNodeArr = new Node[nodeArr.length*2];
+
+            Node<K ,V>[] oldNodeArr = nodeArr;
+            Node<K, V>[] nodeArr = new Node[oldNodeArr.length*2];
+
+            size= 0 ;
+
+            for (int i = 0; i < oldNodeArr.length; i++) {
+
+                Node<K, V> head = oldNodeArr[i];
+                while (head != null) {
+                    K key = head.key;
+                    V val = head.val;
+
+                    put(key, val);
+                    head = head.next;
+                }
+            }
         }
     }
+
+
+
+
 
     private static class Node<K, V> {
         K key;
@@ -108,7 +130,7 @@ public class MyHashMap<K, V> {
 
 
 
-//Написать рехэширование? которое позволяет перенести вусе норды в больший массив при достижении таргет лоад фактора
+//Написать рехэширование которое позволяет перенести вусе норды в больший массив при достижении таргет лоад фактора
 //Либо переиспеользовать пут
 //Либо зайти в каждый бакет пройтись по нодам и записать их в новый массив. Если в текущем массиве они в цепи то в новом массиве они будут уже не в цепи
 //***** В ориг хэш мапе есть пут нод
