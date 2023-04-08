@@ -24,18 +24,18 @@ public class BinSearchTreeHW {
         // 1   3
         //Node root = new Node(2, new Node(1, null, null), new Node(3, null, null));
 
-        /*
-              5
-             / \
-            3   8
-           / \   \
-          1   2   10
-
-         */
+//        /*
+//              5
+//             / \
+//            2   8
+//           / \   \
+//          1   3   10
+//
+//         */
         Node root = new Node(5,
-                             new Node(3,
+                             new Node(2,
                                       new Node(1),
-                                      new Node(2)
+                                      new Node(3)
                              ),
                              new Node(8,
                                       null,
@@ -43,10 +43,35 @@ public class BinSearchTreeHW {
                              )
         );
 
-        assert checkBST(root);
+
+//        assert checkBST(root);
+        printTree(root);
     }
 
     public static boolean checkBST(Node root) {
         return false;
+    }
+
+    public static void printTree(Node root) {
+
+        /*
+              5
+             / \
+            2   8
+           / \   \
+          1   3   10
+
+         */
+
+        if (root.left != null) {
+            printTree(root.left);
+        }
+
+        System.out.print(root.val);
+        System.out.print(' ');
+
+        if (root.right != null) {
+            printTree(root.right);
+        }
     }
 }
