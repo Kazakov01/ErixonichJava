@@ -31,6 +31,16 @@ public class Demo4Locks {
         System.out.println(dh.num);
     }
 
+    public static void foo(DataHolder dh) {
+        synchronized (Demo4Locks.class) {
+            dh.num++;
+        }
+    }
+
+    public static synchronized void bar(DataHolder dh) {
+        dh.num++;
+    }
+
     public static class DataHolder {
         int num;
     }
