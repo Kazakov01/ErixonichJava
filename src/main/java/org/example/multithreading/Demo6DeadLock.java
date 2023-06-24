@@ -12,7 +12,7 @@ public class Demo6DeadLock {
                 int x = 0;
                 for (int i = 0; i < 100000; i++) {
                     synchronized (m1) {
-                        synchronized (m2) {
+                            synchronized (m2) {
                             x++;
                         }
                     }
@@ -26,8 +26,8 @@ public class Demo6DeadLock {
             public void run() {
                 int x = 0;
                 for (int i = 0; i < 100000; i++) {
-                    synchronized (m1) {
-                        synchronized (m2) {
+                    synchronized (m2) {
+                        synchronized (m1) {
                             x++;
                         }
                     }
@@ -42,6 +42,7 @@ public class Demo6DeadLock {
         t2.join();
 
         System.out.println("Completed");
+
     }
 
 }
