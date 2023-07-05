@@ -10,6 +10,7 @@ public class Demo7WaitNotify {
     public static void main(String[] args) throws InterruptedException{
 
         DataHolder dh = new DataHolder();
+        Object mutex = new Object();
 
 
         Object m1 = new Object();
@@ -19,12 +20,22 @@ public class Demo7WaitNotify {
             @Override
             public void run() {
                 while (true) {
-                    if (!dh.isLastPing) {
-                        pingCount++;
-                        dh.isLastPing = true;
+                    synchronized(mutex) {
+                        if (!dh.isLastPing) {
+                            pingCount++;
+                            dh.isLastPing = true;
+//                            System.out.println("ping");
+                            mutex.notify();
+                        } else {
+                            try {
+                                mutex.wait();
+                            }
+                            catch (InterruptedException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
                     }
                 }
-
             }
         });
 
@@ -33,9 +44,21 @@ public class Demo7WaitNotify {
             @Override
             public void run() {
                 while (true) {
-                    if (dh.isLastPing) {
-                        pongCount++;
-                        dh.isLastPing = false;
+                    synchronized (mutex) {
+                        if (dh.isLastPing) {
+                            pongCount++;
+                            dh.isLastPing = false;
+//                            System.out.println("pong");
+                            mutex.notify();
+                        }
+                        else {
+                            try {
+                                mutex.wait();
+                            }
+                            catch (InterruptedException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
                     }
                 }
 
