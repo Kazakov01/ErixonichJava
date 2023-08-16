@@ -8,62 +8,45 @@ public class MySynchronizedArrayList<T> implements Iterable<T> {
     private Object[] data = new Object[1];
     private int size = 0;
 
-    private static Object mutex = new Object();
-
-    public void add(T x) {
+    public synchronized void add(T x) {
        if (size == data.length) {
             resize();
-        }
-       synchronized (mutex) {
-           data[size] = x;
-           size++;
        }
+       data[size] = x;
+       size++;
     }
 
-    public int size() {
-
-        synchronized (mutex) {
-            return size;
-        }
+    public synchronized int size() {
+        return size;
     }
 
-    public T get(int idx) {
+    public synchronized T get(int idx) {
        checkIdx(idx);
+       return (T) data[idx];
 
-        synchronized (mutex) {
-            return (T) data[idx];
-        }
     }
 
-    public void clear() {
+    public synchronized void clear() {
         Object[] newData = new Object[1];
+        size = 0;
+        data = newData;
 
-        synchronized (mutex) {
-            size = 0;
-            data = newData;
-        }
     }
 
-    public void remove(int idx) {
+    public synchronized void remove(int idx) {
         checkIdx(idx);
         for (int i = idx; i < size - 1; i++) {
-            synchronized (mutex) {
-                data[i] = data[i + 1];
-            }
+            data[i] = data[i + 1];
         }
-
-        synchronized (mutex) {
             size--;
         }
+
+
+    public synchronized boolean isEmpty() {
+        return size == 0;
     }
 
-    public boolean isEmpty() {
-        synchronized (mutex) {
-            return size == 0;
-        }
-    }
-
-    public void ensureCapacity(int capacity) {
+    public synchronized void ensureCapacity(int capacity) {
         if (capacity <= data.length)
             return;
 
@@ -73,33 +56,13 @@ public class MySynchronizedArrayList<T> implements Iterable<T> {
             newData[i] = data[i];
         }
 
-        synchronized (mutex) {
-            data = newData;
-        }
+        data = newData;
+
     }
 
-    private void checkIdx(int idx) {
-        if (size <= idx && idx < 0) {
-            throw new IndexOutOfBoundsException("Index " + idx + " Out of Bound of size " + size);
-        }
-    }
-
-    private void resize() {
-        Object[] newData = new Object[data.length*2];
-
-        for (int i = 0 ; i < data.length; i++) {
-            synchronized (mutex) {
-                newData[i] = data[i];
-            }
-        }
-
-        synchronized (mutex) {
-            data = newData;
-        }
-    }
 
     @Override
-    public String toString() {
+    public synchronized String toString() {
         if (size == 0){
             return "[]";
         }
@@ -113,6 +76,21 @@ public class MySynchronizedArrayList<T> implements Iterable<T> {
         sb.append(data[size-1]).append("]");
 
         return sb.toString();
+    }
+
+    private synchronized void checkIdx(int idx) {
+        if (size <= idx && idx < 0) {
+            throw new IndexOutOfBoundsException("Index " + idx + " Out of Bound of size " + size);
+        }
+    }
+
+    private synchronized void resize() {
+        Object[] newData = new Object[data.length*2];
+        for (int i = 0 ; i < data.length; i++) {
+            newData[i] = data[i];
+        }
+        data = newData;
+
     }
 
     @Override

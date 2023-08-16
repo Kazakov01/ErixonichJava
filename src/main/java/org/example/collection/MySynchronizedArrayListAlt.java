@@ -1,5 +1,6 @@
 package org.example.collection;
 
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
@@ -8,11 +9,12 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 public class MySynchronizedArrayListAlt<T> implements Iterable<T> {
 
     ReadWriteLock rwLock = new ReentrantReadWriteLock();
+    Lock readLock = rwLock.readLock();
+    Lock writeLock = rwLock.writeLock();
     private Object[] data = new Object[1];
-    private int size = 0;
+    private volatile int size = 0;
 
     public void add(T x) {
-        Lock readLock = rwLock.readLock();
         Lock writeLock = rwLock.writeLock();
         readLock.lock();
         try {
@@ -32,18 +34,13 @@ public class MySynchronizedArrayListAlt<T> implements Iterable<T> {
     }
 
     public int size() {
-        Lock readLock = rwLock.readLock();
-        try {
-            return size;
-        } finally {
-            readLock.unlock();
-        }
+        return size;
     }
 
     public T get(int idx) {
-       checkIdx(idx);
-       Lock readLock = rwLock.readLock();
+       readLock.lock();
        try {
+           checkIdx(idx);
            return (T) data[idx];
        } finally {
            readLock.unlock();
@@ -52,17 +49,26 @@ public class MySynchronizedArrayListAlt<T> implements Iterable<T> {
 
     public void clear() {
         Object[] newData = new Object[1];
-        size = 0;
-        data = newData;
+        writeLock.lock();
+        try {
+            size = 0;
+            data = newData;
+        } finally {
+            writeLock.unlock();
+        }
     }
 
     public void remove(int idx) {
         checkIdx(idx);
-        for (int i = idx; i < size - 1; i++) {
-            data[i] = data[i + 1];
+        writeLock.lock();
+        try {
+            for (int i = idx; i < size - 1; i++) {
+                data[i] = data[i + 1];
+            }
+            size--;
+        } finally {
+            writeLock.unlock();
         }
-
-        size--;
     }
 
     public boolean isEmpty() {
@@ -70,18 +76,15 @@ public class MySynchronizedArrayListAlt<T> implements Iterable<T> {
     }
 
     public void ensureCapacity(int capacity) {
-        if (capacity <= data.length)
-            return;
-
-        Object[] newData = new Object[capacity];
-
-        for (int i = 0 ; i < data.length; i++) {
-            newData[i] = data[i];
-        }
-
-        Lock writeLock = rwLock.writeLock();
         writeLock.lock();
         try {
+            if (capacity <= data.length)
+                return;
+            Object[] newData = new Object[capacity];
+            System.arraycopy(data, 0, newData, 0, data.length );
+//            for (int i = 0; i < data.length; i++) {
+//                newData[i] = data[i];
+//            }
             data = newData;
         } finally {
             writeLock.unlock();
@@ -89,7 +92,6 @@ public class MySynchronizedArrayListAlt<T> implements Iterable<T> {
     }
 
     private void checkIdx(int idx) {
-        Lock readLock = rwLock.readLock();
         readLock.lock();
         try {
             if (size <= idx && idx < 0) {
@@ -101,22 +103,10 @@ public class MySynchronizedArrayListAlt<T> implements Iterable<T> {
     }
 
     private void resize() {
-        Lock readLock = rwLock.readLock();
-        readLock.lock();
-        Object[] newData = new Object[data.length*2];
-
-        readLock.lock();
-        try {
-            for (int i = 0; i < data.length; i++) {
-                newData[i] = data[i];
-            }
-        } finally {
-            readLock.unlock();
-        }
-
-        Lock writeLock = rwLock.writeLock();
         writeLock.lock();
         try {
+            Object[] newData = new Object[data.length*2];
+            System.arraycopy(data, 0, newData, 0, data.length);
             data = newData;
         } finally {
             writeLock.unlock();
@@ -125,19 +115,24 @@ public class MySynchronizedArrayListAlt<T> implements Iterable<T> {
 
     @Override
     public String toString() {
-        if (size == 0){
-            return "[]";
+        readLock.lock();
+        try {
+            if (size == 0) {
+                return "[]";
+            }
+
+            StringBuilder sb = new StringBuilder();
+            sb.append("[");
+
+            for (int i = 0; i < size - 1; i++) {
+                sb.append(data[i]).append(", ");
+            }
+            sb.append(data[size - 1]).append("]");
+
+            return sb.toString();
+        } finally {
+            readLock.unlock();
         }
-
-        StringBuilder sb = new StringBuilder();
-        sb.append("[");
-
-        for (int i = 0; i < size-1; i++){
-            sb.append(data[i]).append(", ");
-        }
-        sb.append(data[size-1]).append("]");
-
-        return sb.toString();
     }
 
     @Override
