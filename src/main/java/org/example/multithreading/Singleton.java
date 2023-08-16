@@ -6,7 +6,6 @@ public class Singleton {
 
     private int data = 10;
 
-
     private Singleton() {
     }
 

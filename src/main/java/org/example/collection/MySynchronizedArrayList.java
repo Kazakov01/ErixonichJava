@@ -1,46 +1,66 @@
-package org.example.multithreading;
+package org.example.collection;
 
 import java.util.Iterator;
 
-public class MyArrayListDemoHW<T> implements Iterable<T> {
+public class MySynchronizedArrayList<T> implements Iterable<T> {
+
 
     private Object[] data = new Object[1];
     private int size = 0;
+
+    private static Object mutex = new Object();
 
     public void add(T x) {
        if (size == data.length) {
             resize();
         }
-        data[size] = x;
-        size++;
+       synchronized (mutex) {
+           data[size] = x;
+           size++;
+       }
     }
 
     public int size() {
-        return size;
+
+        synchronized (mutex) {
+            return size;
+        }
     }
 
     public T get(int idx) {
        checkIdx(idx);
-        return (T) data[idx];
+
+        synchronized (mutex) {
+            return (T) data[idx];
+        }
     }
 
     public void clear() {
         Object[] newData = new Object[1];
-        size = 0;
-        data = newData;
+
+        synchronized (mutex) {
+            size = 0;
+            data = newData;
+        }
     }
 
     public void remove(int idx) {
         checkIdx(idx);
         for (int i = idx; i < size - 1; i++) {
-            data[i] = data[i + 1];
+            synchronized (mutex) {
+                data[i] = data[i + 1];
+            }
         }
 
-        size--;
+        synchronized (mutex) {
+            size--;
+        }
     }
 
     public boolean isEmpty() {
-        return size == 0;
+        synchronized (mutex) {
+            return size == 0;
+        }
     }
 
     public void ensureCapacity(int capacity) {
@@ -53,7 +73,9 @@ public class MyArrayListDemoHW<T> implements Iterable<T> {
             newData[i] = data[i];
         }
 
-        data = newData;
+        synchronized (mutex) {
+            data = newData;
+        }
     }
 
     private void checkIdx(int idx) {
@@ -66,10 +88,14 @@ public class MyArrayListDemoHW<T> implements Iterable<T> {
         Object[] newData = new Object[data.length*2];
 
         for (int i = 0 ; i < data.length; i++) {
-            newData[i] = data[i];
+            synchronized (mutex) {
+                newData[i] = data[i];
+            }
         }
 
-        data = newData;
+        synchronized (mutex) {
+            data = newData;
+        }
     }
 
     @Override
@@ -110,7 +136,7 @@ public class MyArrayListDemoHW<T> implements Iterable<T> {
 
         @Override
         public void remove() {
-            MyArrayListDemoHW.this.remove(idx);
+            MySynchronizedArrayList.this.remove(idx);
         }
     }
 }
