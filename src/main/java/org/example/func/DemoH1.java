@@ -6,15 +6,17 @@ import java.util.List;
 
 public class DemoH1 {
     public static void main(String[] args) {
-        List<Integer> list = Arrays.asList(1000, 250, 360, 5000, 780);
+        List<Integer> list = Arrays.asList(1000, 250, 360, 5000, 780, 100, 244);
         List<Integer> sink = new ArrayList<>();
 
         int x = 777;
 
-        list.forEach(/*
-        добавить в синк элменты данного листа
-        которые больше икса
-        */);
+        list.forEach((item)-> {
+            if (item > x) {
+                sink.add(item);
+            }
+        });
 
+        System.out.println(sink);
     }
 }
