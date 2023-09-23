@@ -33,7 +33,7 @@ public class Demo2 {
         list.forEach(Demo2::printFormatted);
         list.forEach(System.out::println);
         Optional<BigInteger> opt = Optional.empty();
-        opt.orElseGet(BigInteger::new);
+//        opt.orElseGet(BigInteger::new);
 
     }
 
