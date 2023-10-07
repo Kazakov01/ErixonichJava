@@ -21,7 +21,6 @@ public class DemoH2 {
                 .peek(ld -> System.out.println("1 " + ld.getMonth() + " " + ld.getYear()))
                 .toList();
 
-
     }
 
     /* есть набор дат
