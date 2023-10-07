@@ -16,7 +16,7 @@ public class Demo3Streams {
                 .peek(ld -> System.out.println("peek1 " + ld))
                 .filter(ld1 -> ld1.getDayOfWeek() == DayOfWeek.SATURDAY ||
                         ld1.getDayOfWeek() == DayOfWeek.SUNDAY)
-                .peek(ld -> System.out.println("peek2 " + ld))
+//                .peek(ld -> System.out.println("peek2 " + ld))
 //                .min((LocalDate d1, LocalDate d2) -> {
 //                    if (d1.isBefore(d2))
 //                        return -1;
