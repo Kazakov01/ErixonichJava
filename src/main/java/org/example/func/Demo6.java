@@ -1,10 +1,10 @@
 package org.example.func;
 
-import jdk.incubator.vector.VectorOperators;
-
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.Year;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 import java.util.function.Function;
@@ -16,24 +16,53 @@ import java.util.stream.Stream;
 public class Demo6 {
 
     public static void main(String[] args) {
+
+        //Генерируем новые города
+        List<String> names = Arrays.asList("Artem", "Ivan", "Masha", "Zoya", "Tema", "Peter");
+        List<String> citiesSuff = Arrays.asList("burg", "grad", "ville", "ostan");
+
+        Random rnd = new Random();
+        Supplier<String> leetCity = () -> {
+            String city = names.get(rnd.nextInt(0, names.size())).concat(citiesSuff.get(rnd.nextInt(0, citiesSuff.size())));
+            return city;
+        };
+
+        System.out.println(leetCity.get());
+
+        //Определяем социофобов
+        org.example.func.Demo5.Person ivan = new org.example.func.Demo5.Person("Ivan", "Ivanov");
+        org.example.func.Demo5.Person elvis = new org.example.func.Demo5.Person("Elvis", "Rockandrolla");
+        org.example.func.Demo5.Person dima = new org.example.func.Demo5.Person("Dima", "Petrov");
+        org.example.func.Demo5.Person anon =  new org.example.func.Demo5.Person("Anon", "Bezyimya");
+        ivan.friends.add(elvis);
+        dima.friends.add(ivan);
+        Predicate<org.example.func.Demo5.Person> predicate = t -> t.friends.size() == 0;
+
+//        System.out.println(anon.name + " is sociophobic person ?\n"  + predicate.test(anon));
+
+//        Function<Long, Instant> f = ?;
+
+        List<String> list = Arrays.asList("1999-09-23", "1999-09-23", "1999-09-24", "1999-09-24", "2007-01-23", "1985-02-01"
+                , "1977-12-21", "2013-06-11", "1999-08-12", "2023-09-23", "2023-01-01", "2023-08-23");
+
+        List<LocalDate> localDate = list.stream()
+                .map(LocalDate::parse)
+                .distinct()
+                .toList();
+
+        UnaryOperator<LocalDate> unary = ldt -> ldt.minusDays(3);
+
+//        for (LocalDate ld : localDate) {
+//            System.out.println(unary.apply(ld));
+//        }
+
+    }
+
+    public static void rnd(String[] args) {
         Random rnd = new Random();
         long a = Stream.generate(() -> rnd.nextInt()).count();
         System.out.println(a);
 //        System.out.println(Long.MAX_VALUE + 1);
-
-    }
-
-    public static void homeWork() {
-
-        //написать выражение которое соответствует левой части выражения
-        Supplier<String> sup = ?;
-
-        //придерживаться определенной бизнес логики в написании
-        Predicate<Demo5.Person> predicate = ?;
-
-        Function<Long, Instant> f = ?;
-
-        UnaryOperator<LocalDate> unary = ?;
 
     }
 
