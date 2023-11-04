@@ -23,11 +23,11 @@ public class Demo6 {
 
         Random rnd = new Random();
         Supplier<String> leetCity = () -> {
-            String city = names.get(rnd.nextInt(0, names.size())).concat(citiesSuff.get(rnd.nextInt(0, citiesSuff.size())));
-            return city;
+            return names.get(rnd.nextInt(names.size())) + citiesSuff.get(rnd.nextInt(citiesSuff.size()));
         };
 
-        System.out.println(leetCity.get());
+
+//        System.out.println(leetCity.get());
 
         //Определяем социофобов
         org.example.func.Demo5.Person ivan = new org.example.func.Demo5.Person("Ivan", "Ivanov");
@@ -36,9 +36,9 @@ public class Demo6 {
         org.example.func.Demo5.Person anon =  new org.example.func.Demo5.Person("Anon", "Bezyimya");
         ivan.friends.add(elvis);
         dima.friends.add(ivan);
-        Predicate<org.example.func.Demo5.Person> predicate = t -> t.friends.size() == 0;
+        Predicate<org.example.func.Demo5.Person> predicate = t -> t.friends.isEmpty();
 
-//        System.out.println(anon.name + " is sociophobic person ?\n"  + predicate.test(anon));
+        System.out.println(anon.name + " is sociophobic person ?\n"  + predicate.test(anon));
 
 //        Function<Long, Instant> f = ?;
 
@@ -50,11 +50,12 @@ public class Demo6 {
                 .distinct()
                 .toList();
 
-        UnaryOperator<LocalDate> unary = ldt -> ldt.minusDays(3);
+        UnaryOperator<LocalDate> firstDayPrevMonth = ldt -> ldt.withDayOfMonth(1).minusMonths(1);
+        Function<LocalDate, LocalDate> func = ldt -> ldt.withDayOfMonth(1).minusMonths(1);
 
-//        for (LocalDate ld : localDate) {
-//            System.out.println(unary.apply(ld));
-//        }
+        for (LocalDate ld : localDate) {
+            System.out.println(func.apply(ld));
+        }
 
     }
 
