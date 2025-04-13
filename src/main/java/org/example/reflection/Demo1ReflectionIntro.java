@@ -2,13 +2,13 @@ package org.example.reflection;
 
 import java.lang.reflect.Field;
 
-public class Demo1 {
+public class Demo1ReflectionIntro {
     private int a = 1;
     private static int b = 2;
 
     public static void main(String[] args) throws ClassNotFoundException, NoSuchFieldException, IllegalAccessException {
-        System.out.println(Demo1.class.getName());
-        Class<?> type1 = Demo1.class;
+        System.out.println(Demo1ReflectionIntro.class.getName());
+        Class<?> type1 = Demo1ReflectionIntro.class;
 //        Class<?> type2 = Class.forName("org.example.reflection.Demo1");
         Field[] fields = type1.getDeclaredFields();
         for (Field f : fields){
