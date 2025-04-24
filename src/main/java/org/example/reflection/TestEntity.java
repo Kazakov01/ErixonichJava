@@ -12,7 +12,7 @@ public class TestEntity {
     private long balance;
 
     @ConstructorProperties({"id", "name", "birthday", "balance"})
-    private TestEntity(@PlusOneAnno int id, String name, LocalDate birthday,@PlusOneAnno long balance) {
+    public TestEntity(@PlusOneAnno int id, String name, LocalDate birthday,@PlusOneAnno long balance) {
         this.id = id;
         this.name = name;
         this.birthday = birthday;
@@ -24,14 +24,17 @@ public class TestEntity {
         this.birthday = birthday;
     }
 
+    @LogAnno(lvl = "info")
     public int getId() {
         return id;
     }
 
+    @LogAnno(lvl = "warn")
     public String getName() {
         return name;
     }
 
+    @LogAnno(lvl = "error")
     public LocalDate getBirthday() {
         return birthday;
     }

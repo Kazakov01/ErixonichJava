@@ -9,4 +9,5 @@ import java.lang.reflect.Parameter;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 public @interface LogAnno {
+    String lvl();
 }
